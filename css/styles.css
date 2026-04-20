@@ -1,0 +1,57 @@
+body {
+    background-color: #0f172a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.text-primary {
+    color: #00d2ff !important;
+}
+
+.bg-primary {
+    background-color: #00d2ff !important;
+    color: #000 !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #00d2ff;
+    color: #000;
+    font-weight: bold;
+}
+
+.nav-pills .nav-link {
+    color: #94a3b8;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 210, 255, 0.1) !important;
+    color: #fff;
+}
+
+/* Nuevos estilos para los logos y el autocompletado */
+.team-logo-sm {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.team-logo-md {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.team-logo-lg {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Efecto hover para la lista de búsqueda */
+#sugerencias1 li:hover, #sugerencias2 li:hover {
+    background-color: #00d2ff !important;
+    color: #000 !important;
+}

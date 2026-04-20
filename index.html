@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCL FIFA 24 Tracker</title>
+    <link rel="icon" type="image/png" href="img/icono/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-dark text-light">
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 text-uppercase fw-bold text-primary">🏆 UCL FIFA 24 - TRACKER</h1>
+        
+        <ul class="nav nav-pills justify-content-center mb-4" id="trackerTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#posiciones" type="button" role="tab">Tabla de Posiciones</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#partidos" type="button" role="tab">Registrar Partido</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#goleo" type="button" role="tab">Estadísticas y Goleo</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            
+            <div class="tab-pane fade show active" id="posiciones">
+                <div class="card bg-secondary bg-opacity-25 shadow border-0 mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover text-center align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Pos</th>
+                                        <th>Jugador</th>
+                                        <th>PJ</th>
+                                        <th>G</th>
+                                        <th>E</th>
+                                        <th>P</th>
+                                        <th>GF</th>
+                                        <th>GC</th>
+                                        <th>DG</th>
+                                        <th class="text-primary">Pts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-posiciones-body">
+                                    <tr><td colspan="10" class="text-center text-muted">Cargando datos...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-end mt-4">
+                            <button id="btn-terminar-temporada" class="btn btn-success fw-bold px-4" disabled>
+                                🏁 Terminar Temporada
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mt-5 mb-3 text-primary text-center text-uppercase fs-4">⏱ Historial de Partidos</h3>
+                <div id="historial-partidos" class="d-flex flex-column gap-3 pb-5">
+                    </div>
+            </div>
+
+            <div class="tab-pane fade" id="partidos">
+                <div class="card bg-secondary bg-opacity-25 border-primary shadow mb-5">
+                    <div class="card-header bg-primary text-dark fw-bold fs-5 text-center">Nuevo Resultado</div>
+                    <div class="card-body p-4">
+                        <form id="form-resultado" class="row g-3 align-items-center justify-content-center" autocomplete="off">
+                            
+                            <div class="col-12 col-md-5 text-center">
+                                <select class="form-select form-select-lg mb-3 bg-dark text-white border-secondary" id="jugador1" required>
+                                    <option value="" selected disabled>Jugador Local...</option>
+                                    <option value="Huerta">Huerta</option>
+                                    <option value="Addi">Addi</option>
+                                    <option value="Marcelo">Marcelo</option>
+                                </select>
+                                
+                                <div class="position-relative mb-3 text-start">
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="equipo1" placeholder="Buscar equipo..." required>
+                                    <ul class="dropdown-menu w-100 list-group list-group-flush bg-dark border-secondary p-0 position-absolute shadow" id="sugerencias1" style="z-index: 1000; max-height: 250px; overflow-y: auto; display: none;"></ul>
+                                </div>
+
+                                <input type="number" class="form-control form-control-lg text-center fw-bold bg-dark text-white border-secondary" id="goles1" placeholder="Goles" min="0" required>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-center fw-bold fs-3 text-muted my-3 my-md-0">VS</div>
+
+                            <div class="col-12 col-md-5 text-center">
+                                <select class="form-select form-select-lg mb-3 bg-dark text-white border-secondary" id="jugador2" required>
+                                    <option value="" selected disabled>Jugador Visitante...</option>
+                                    <option value="Huerta">Huerta</option>
+                                    <option value="Addi">Addi</option>
+                                    <option value="Marcelo">Marcelo</option>
+                                </select>
+                                
+                                <div class="position-relative mb-3 text-start">
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="equipo2" placeholder="Buscar equipo..." required>
+                                    <ul class="dropdown-menu w-100 list-group list-group-flush bg-dark border-secondary p-0 position-absolute shadow" id="sugerencias2" style="z-index: 1000; max-height: 250px; overflow-y: auto; display: none;"></ul>
+                                </div>
+
+                                <input type="number" class="form-control form-control-lg text-center fw-bold bg-dark text-white border-secondary" id="goles2" placeholder="Goles" min="0" required>
+                            </div>
+
+                            <div class="col-12 mt-4 text-center">
+                                <div class="form-check form-switch fs-5 d-inline-block">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="hubo-penales">
+                                    <label class="form-check-label text-warning" for="hubo-penales">Hubo definición por Penales</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-none" id="contenedor-penales">
+                                <div class="row justify-content-center mt-2">
+                                    <div class="col-5">
+                                        <input type="number" class="form-control text-center bg-dark text-warning border-warning" id="penales1" placeholder="Goles Penal Local" min="0">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="number" class="form-control text-center bg-dark text-warning border-warning" id="penales2" placeholder="Goles Penal Visita" min="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 w-100">Guardar Partido</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="goleo">
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-4">
+                        <div class="card bg-secondary bg-opacity-25 shadow border-0 h-100">
+                            <div class="card-body">
+                                <h4 class="text-center mb-3 text-info">👟 Máximo Goleador</h4>
+                                <ul class="list-group list-group-flush rounded" id="lista-goleadores"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card bg-secondary bg-opacity-25 shadow border-0 h-100">
+                            <div class="card-body">
+                                <h4 class="text-center mb-3 text-danger">🛡️ Más Goles en Contra</h4>
+                                <ul class="list-group list-group-flush rounded" id="lista-goles-contra"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card bg-secondary bg-opacity-25 shadow border-0">
+                            <div class="card-body row text-center py-4">
+                                <div class="col-6 border-end border-secondary">
+                                    <h5 class="text-success mb-3">⭐ Equipo con Más Victorias</h5>
+                                    <img src="img/equipos/default.png" id="img-mas-victorias" class="team-logo-lg mb-2">
+                                    <h3 id="equipo-mas-victorias" class="fw-bold m-0">-</h3>
+                                    <span id="stats-mas-victorias" class="text-muted"></span>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="text-warning mb-3">📉 Equipo con Menos Victorias</h5>
+                                    <img src="img/equipos/default.png" id="img-menos-victorias" class="team-logo-lg mb-2">
+                                    <h3 id="equipo-menos-victorias" class="fw-bold m-0">-</h3>
+                                    <span id="stats-menos-victorias" class="text-muted"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalResumen" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-primary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-primary fw-bold">🏁 ¡Temporada Finalizada!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <h2 class="mb-4">🏆 Campeón: <br><span id="campeon-nombre" class="text-warning display-4 fw-bold"></span></h2>
+                    <p class="fs-5">Con <strong id="campeon-pts" class="text-primary"></strong> puntos.</p>
+                    <hr class="border-secondary my-4">
+                    <h3 class="mb-3">👟 Pichichi: <br><span id="pichichi-nombre" class="text-info fw-bold"></span></h3>
+                    <p class="fs-5">Con <strong id="pichichi-goles" class="text-primary"></strong> goles anotados.</p>
+                </div>
+                <div class="modal-footer border-secondary justify-content-center gap-3">
+                    <button type="button" class="btn btn-outline-light px-4" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger px-4 fw-bold" id="btn-nueva-temporada">🔄 Nueva Temporada</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/ui.js"></script>
+</body>
+</html>
