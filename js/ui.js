@@ -5,7 +5,7 @@ let estadisticasActuales = null;
 let goleadoresActuales = null;
 
 // ==========================================
-// CONFIGURACIÓN DE EQUIPOS
+// CONFIGURACIÓN DE EQUIPOS Y PRECARGA
 // ==========================================
 const equiposUCL = [
     "Bayern Munich", "Manchester United", "FC Copenhagen", "Galatasaray",
@@ -26,6 +26,15 @@ const obtenerRutaLogo = (nombreEquipo) => {
                                 .toLowerCase().replace(/[^a-z0-9]/g, '-');
     return `img/equipos/${filename}.png`;
 };
+
+// FIX PARA MÓVILES: Precargar imágenes en caché
+// Esperamos 1 segundo para no hacer lenta la carga inicial de la página
+setTimeout(() => {
+    equiposUCL.forEach(equipo => {
+        const img = new Image();
+        img.src = obtenerRutaLogo(equipo);
+    });
+}, 1000);
 
 const configurarAutocompletado = (inputId, sugerenciasId) => {
     const input = document.getElementById(inputId);
@@ -179,7 +188,7 @@ btnNuevaTemporada.addEventListener('click', async () => {
 });
 
 // ==========================================
-// SORTEO ALEATORIO (NUEVO)
+// SORTEO ALEATORIO (FIXED)
 // ==========================================
 const btnSorteo = document.getElementById('btn-generar-sorteo');
 const imgSorteo1 = document.getElementById('sorteo-img-1');
@@ -188,18 +197,16 @@ const nombreSorteo1 = document.getElementById('sorteo-nombre-1');
 const nombreSorteo2 = document.getElementById('sorteo-nombre-2');
 
 btnSorteo.addEventListener('click', () => {
-    // Desactivar botón y aplicar efecto visual
     btnSorteo.disabled = true;
     btnSorteo.innerText = "🎰 Sorteando...";
     imgSorteo1.classList.add('animating');
     imgSorteo2.classList.add('animating');
 
     let counter = 0;
-    const duration = 2000; // 2 segundos de animación
-    const intervalTime = 100; // Cambia escudo cada 100ms
+    const duration = 2000; 
+    const intervalTime = 150; // FIX: Tiempo aumentado para dar respiro al celular
     
     const shuffle = setInterval(() => {
-        // Seleccionar equipos al azar temporalmente
         const t1 = equiposUCL[Math.floor(Math.random() * equiposUCL.length)];
         const t2 = equiposUCL[Math.floor(Math.random() * equiposUCL.length)];
         
@@ -211,13 +218,11 @@ btnSorteo.addEventListener('click', () => {
         
         counter += intervalTime;
         
-        // Finalizar animación
         if (counter >= duration) {
             clearInterval(shuffle);
             imgSorteo1.classList.remove('animating');
             imgSorteo2.classList.remove('animating');
             
-            // Asegurarnos de que no sea el mismo equipo contra sí mismo
             let final1 = equiposUCL[Math.floor(Math.random() * equiposUCL.length)];
             let final2 = equiposUCL[Math.floor(Math.random() * equiposUCL.length)];
             while(final1 === final2) {
@@ -230,7 +235,6 @@ btnSorteo.addEventListener('click', () => {
             imgSorteo2.src = obtenerRutaLogo(final2);
             nombreSorteo2.innerText = final2;
             
-            // Restaurar botón
             btnSorteo.disabled = false;
             btnSorteo.innerText = "🎰 Generar Otro Partido";
         }
