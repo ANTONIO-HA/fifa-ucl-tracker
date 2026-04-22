@@ -27,7 +27,6 @@ body {
     color: #fff;
 }
 
-/* Nuevos estilos para los logos y el autocompletado */
 .team-logo-sm {
     width: 28px;
     height: 28px;
@@ -50,8 +49,23 @@ body {
     cursor: pointer;
 }
 
-/* Efecto hover para la lista de búsqueda */
 #sugerencias1 li:hover, #sugerencias2 li:hover {
     background-color: #00d2ff !important;
     color: #000 !important;
+}
+
+/* Efectos para la Ruleta de Sorteo */
+.roulette-img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 50%;
+    transition: transform 0.1s ease-in-out, filter 0.1s;
+}
+
+.animating {
+    transform: scale(1.1);
+    filter: blur(2px);
 }

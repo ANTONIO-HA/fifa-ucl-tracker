@@ -21,7 +21,10 @@
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#partidos" type="button" role="tab">Registrar Partido</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#goleo" type="button" role="tab">Estadísticas y Goleo</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#goleo" type="button" role="tab">Estadísticas</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-warning" data-bs-toggle="pill" data-bs-target="#sorteo" type="button" role="tab">🎲 Sorteo</button>
             </li>
         </ul>
 
@@ -58,10 +61,8 @@
                         </div>
                     </div>
                 </div>
-
                 <h3 class="mt-5 mb-3 text-primary text-center text-uppercase fs-4">⏱ Historial de Partidos</h3>
-                <div id="historial-partidos" class="d-flex flex-column gap-3 pb-5">
-                    </div>
+                <div id="historial-partidos" class="d-flex flex-column gap-3 pb-5"></div>
             </div>
 
             <div class="tab-pane fade" id="partidos">
@@ -69,7 +70,6 @@
                     <div class="card-header bg-primary text-dark fw-bold fs-5 text-center">Nuevo Resultado</div>
                     <div class="card-body p-4">
                         <form id="form-resultado" class="row g-3 align-items-center justify-content-center" autocomplete="off">
-                            
                             <div class="col-12 col-md-5 text-center">
                                 <select class="form-select form-select-lg mb-3 bg-dark text-white border-secondary" id="jugador1" required>
                                     <option value="" selected disabled>Jugador Local...</option>
@@ -77,12 +77,10 @@
                                     <option value="Addi">Addi</option>
                                     <option value="Marcelo">Marcelo</option>
                                 </select>
-                                
                                 <div class="position-relative mb-3 text-start">
                                     <input type="text" class="form-control bg-dark text-white border-secondary" id="equipo1" placeholder="Buscar equipo..." required>
                                     <ul class="dropdown-menu w-100 list-group list-group-flush bg-dark border-secondary p-0 position-absolute shadow" id="sugerencias1" style="z-index: 1000; max-height: 250px; overflow-y: auto; display: none;"></ul>
                                 </div>
-
                                 <input type="number" class="form-control form-control-lg text-center fw-bold bg-dark text-white border-secondary" id="goles1" placeholder="Goles" min="0" required>
                             </div>
 
@@ -95,12 +93,10 @@
                                     <option value="Addi">Addi</option>
                                     <option value="Marcelo">Marcelo</option>
                                 </select>
-                                
                                 <div class="position-relative mb-3 text-start">
                                     <input type="text" class="form-control bg-dark text-white border-secondary" id="equipo2" placeholder="Buscar equipo..." required>
                                     <ul class="dropdown-menu w-100 list-group list-group-flush bg-dark border-secondary p-0 position-absolute shadow" id="sugerencias2" style="z-index: 1000; max-height: 250px; overflow-y: auto; display: none;"></ul>
                                 </div>
-
                                 <input type="number" class="form-control form-control-lg text-center fw-bold bg-dark text-white border-secondary" id="goles2" placeholder="Goles" min="0" required>
                             </div>
 
@@ -110,7 +106,6 @@
                                     <label class="form-check-label text-warning" for="hubo-penales">Hubo definición por Penales</label>
                                 </div>
                             </div>
-
                             <div class="col-12 d-none" id="contenedor-penales">
                                 <div class="row justify-content-center mt-2">
                                     <div class="col-5">
@@ -121,7 +116,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-12 text-center mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 w-100">Guardar Partido</button>
                             </div>
@@ -168,6 +162,34 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane fade" id="sorteo">
+                <div class="card bg-secondary bg-opacity-25 shadow border-0 mb-5">
+                    <div class="card-body p-5 text-center">
+                        <h2 class="text-warning mb-2 fw-bold">🎲 Sorteo Aleatorio</h2>
+                        <p class="text-muted mb-5">Genera un duelo aleatorio al estilo Champions League</p>
+                        
+                        <div class="row justify-content-center align-items-center mb-5">
+                            <div class="col-5 col-md-4">
+                                <img src="img/equipos/default.png" id="sorteo-img-1" class="roulette-img mb-3 shadow-lg">
+                                <h4 id="sorteo-nombre-1" class="fw-bold text-light">-</h4>
+                            </div>
+                            
+                            <div class="col-2 col-md-1 text-muted fw-bold fs-1">VS</div>
+                            
+                            <div class="col-5 col-md-4">
+                                <img src="img/equipos/default.png" id="sorteo-img-2" class="roulette-img mb-3 shadow-lg">
+                                <h4 id="sorteo-nombre-2" class="fw-bold text-light">-</h4>
+                            </div>
+                        </div>
+
+                        <button id="btn-generar-sorteo" class="btn btn-warning btn-lg fw-bold px-5 rounded-pill shadow">
+                            🎰 ¡Girar la Ruleta!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
