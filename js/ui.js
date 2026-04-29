@@ -1,4 +1,4 @@
-import { registrarPartido, escucharCambios, reiniciarTemporada } from './database.js';
+import { registrarPartido, escucharCambios, reiniciarTemporada, eliminarPartido } from './database.js';
 import { calcularEstadisticas, obtenerGoleadores, obtenerGolesEnContra, obtenerEstadisticasEquipos } from './logic.js';
 
 let estadisticasActuales = null;
@@ -21,14 +21,13 @@ const equiposUCL = [
 ];
 
 const obtenerRutaLogo = (nombreEquipo) => {
-    if (!nombreEquipo) return 'img/equipos/default.png';
+    if (!nombreEquipo) return 'assets/img/equipos/default.png';
     const filename = nombreEquipo.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                                 .toLowerCase().replace(/[^a-z0-9]/g, '-');
-    return `img/equipos/${filename}.png`;
+    return `assets/img/equipos/${filename}.png`;
 };
 
 // FIX PARA MÓVILES: Precargar imágenes en caché
-// Esperamos 1 segundo para no hacer lenta la carga inicial de la página
 setTimeout(() => {
     equiposUCL.forEach(equipo => {
         const img = new Image();
@@ -51,7 +50,7 @@ const configurarAutocompletado = (inputId, sugerenciasId) => {
             filtrados.forEach(equipo => {
                 const li = document.createElement('li');
                 li.className = 'list-group-item bg-dark text-white border-secondary cursor-pointer d-flex align-items-center gap-3 py-2';
-                li.innerHTML = `<img src="${obtenerRutaLogo(equipo)}" class="team-logo-sm" onerror="this.src='img/equipos/default.png'"> <span>${equipo}</span>`;
+                li.innerHTML = `<img src="${obtenerRutaLogo(equipo)}" class="team-logo-sm" onerror="this.src='assets/img/equipos/default.png'"> <span>${equipo}</span>`;
                 li.addEventListener('mousedown', (e) => {
                     e.preventDefault(); input.value = equipo; sugerencias.style.display = 'none';
                 });
@@ -132,16 +131,17 @@ escucharCambios((partidos) => {
         historialDiv.innerHTML = [...partidos].reverse().map(p => {
             const marcador = p.penales ? `${p.g1} <span class="text-warning fs-6">(${p.p1})</span> - <span class="text-warning fs-6">(${p.p2})</span> ${p.g2}` : `${p.g1} - ${p.g2}`;
             return `
-            <div class="card bg-dark border-secondary shadow-sm">
-                <div class="card-body py-3 px-3 d-flex justify-content-between align-items-center">
+            <div class="card bg-dark border-secondary shadow-sm position-relative mt-2">
+                <button class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2 btn-eliminar" data-id="${p.id}" style="z-index: 10;" title="Eliminar partido">🗑️</button>
+                <div class="card-body py-3 px-3 d-flex justify-content-between align-items-center mt-3">
                     <div class="d-flex align-items-center gap-3 text-start" style="width: 35%;">
-                        <img src="${obtenerRutaLogo(p.eq1)}" class="team-logo-md" onerror="this.src='img/equipos/default.png'">
+                        <img src="${obtenerRutaLogo(p.eq1)}" class="team-logo-md" onerror="this.src='assets/img/equipos/default.png'">
                         <div><span class="fw-bold d-block text-primary">${p.j1}</span><small class="text-light" style="font-size: 0.8rem;">${p.eq1}</small></div>
                     </div>
                     <div class="text-center fw-bold fs-5 bg-secondary bg-opacity-25 px-3 py-2 rounded" style="width: 25%;">${marcador}</div>
                     <div class="d-flex align-items-center justify-content-end gap-3 text-end" style="width: 35%;">
                         <div><span class="fw-bold d-block text-primary">${p.j2}</span><small class="text-light" style="font-size: 0.8rem;">${p.eq2}</small></div>
-                        <img src="${obtenerRutaLogo(p.eq2)}" class="team-logo-md" onerror="this.src='img/equipos/default.png'">
+                        <img src="${obtenerRutaLogo(p.eq2)}" class="team-logo-md" onerror="this.src='assets/img/equipos/default.png'">
                     </div>
                 </div>
             </div>`;
@@ -161,8 +161,8 @@ escucharCambios((partidos) => {
         document.getElementById('stats-menos-victorias').innerText = `${menosGanador.victorias} Victorias en ${menosGanador.pj} PJ`;
         document.getElementById('img-menos-victorias').src = obtenerRutaLogo(menosGanador.nombre);
     } else {
-        document.getElementById('equipo-mas-victorias').innerText = "-"; document.getElementById('stats-mas-victorias').innerText = ""; document.getElementById('img-mas-victorias').src = "img/equipos/default.png";
-        document.getElementById('equipo-menos-victorias').innerText = "-"; document.getElementById('stats-menos-victorias').innerText = ""; document.getElementById('img-menos-victorias').src = "img/equipos/default.png";
+        document.getElementById('equipo-mas-victorias').innerText = "-"; document.getElementById('stats-mas-victorias').innerText = ""; document.getElementById('img-mas-victorias').src = "assets/img/equipos/default.png";
+        document.getElementById('equipo-menos-victorias').innerText = "-"; document.getElementById('stats-menos-victorias').innerText = ""; document.getElementById('img-menos-victorias').src = "assets/img/equipos/default.png";
     }
 
     if (partidos.length > 0) {
@@ -187,6 +187,16 @@ btnNuevaTemporada.addEventListener('click', async () => {
     }
 });
 
+historialDiv.addEventListener('click', async (e) => {
+    const btnEliminar = e.target.closest('.btn-eliminar');
+    if (btnEliminar) {
+        const idPartido = btnEliminar.getAttribute('data-id');
+        if (confirm("⚠️ ¿Estás seguro de que quieres eliminar este partido? Los puntos se recalcularán automáticamente.")) {
+            await eliminarPartido(idPartido);
+        }
+    }
+});
+
 // ==========================================
 // SORTEO ALEATORIO (FIXED)
 // ==========================================
@@ -204,7 +214,7 @@ btnSorteo.addEventListener('click', () => {
 
     let counter = 0;
     const duration = 2000; 
-    const intervalTime = 150; // FIX: Tiempo aumentado para dar respiro al celular
+    const intervalTime = 150; 
     
     const shuffle = setInterval(() => {
         const t1 = equiposUCL[Math.floor(Math.random() * equiposUCL.length)];
